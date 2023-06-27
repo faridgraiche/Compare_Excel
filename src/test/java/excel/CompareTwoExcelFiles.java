@@ -4,7 +4,12 @@ package excel;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
 public class CompareTwoExcelFiles {
@@ -15,6 +20,11 @@ public class CompareTwoExcelFiles {
         String filePath1 = user+"/testing_excel_file.xlsx";
         String filePath2 = user+"/testing_excel_file_modified.xlsx";
         DataFormatter dataFormatter = new DataFormatter();
+
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");
+        String formattedDate = date.format(dateTimeFormatter);
+
 
 
         try {
@@ -59,7 +69,7 @@ public class CompareTwoExcelFiles {
 
             }
 
-            FileOutputStream fileOutputStream = new FileOutputStream("comparison_output.xlsx");
+            FileOutputStream fileOutputStream = new FileOutputStream("comparison_output "+formattedDate+".xlsx");
             workbook1.write(fileOutputStream);
             workbook1.close();
             workbook2.close();
@@ -69,8 +79,10 @@ public class CompareTwoExcelFiles {
             System.out.println("comparison completed");
 
 
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (FileNotFoundException e){
+            System.out.println("check your file path");
+        }catch (IOException e){
+            System.out.println("IOException occurred");
         }
 
 
